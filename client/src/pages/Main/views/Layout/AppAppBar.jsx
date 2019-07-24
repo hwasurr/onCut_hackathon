@@ -68,8 +68,20 @@ function AppAppBar(props) {
   } = props;
 
   // 대시보드로 이동 버튼 클릭
-  const handleClick = () => {
-    history.push('/dashboard');
+  const handleClick = (clickType) => {
+    switch (clickType) {
+      case 'login':
+        history.push('/login');
+        break;
+      case 'regist':
+        history.push('/regist');
+        break;
+      case 'toDashboard':
+        history.push('/dashboard');
+        break;
+      default:
+        break;
+    }
   };
 
   const LogButton = () => {
@@ -88,7 +100,7 @@ function AppAppBar(props) {
       <Button
         className={classes.rightLink}
         color="inherit"
-        onClick={logout}
+        onClick={() => handleClick('login')}
       >
         로그인
       </Button>
@@ -100,7 +112,7 @@ function AppAppBar(props) {
       return (
         <Button
           className={classNames(classes.rightLink, classes.coloredLink)}
-          onClick={handleClick}
+          onClick={() => handleClick('toDashboard')}
         >
         대시보드이동
         </Button>
@@ -109,7 +121,7 @@ function AppAppBar(props) {
     return (
       <Button
         className={classNames(classes.rightLink, classes.coloredLink)}
-        onClick={handleClick}
+        onClick={() => handleClick('regist')}
       >
         회원가입
       </Button>
@@ -127,7 +139,7 @@ function AppAppBar(props) {
             component={Link}
             to="/"
           >
-            {'OnAD'}
+            {'OnCut'}
           </Button>
 
           <div className={classes.rightDesktop}>

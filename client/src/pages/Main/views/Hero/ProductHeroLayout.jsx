@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import clsx from 'clsx';
 
 const styles = theme => ({
   root: {
@@ -46,9 +45,7 @@ const styles = theme => ({
 });
 
 function ProductHeroLayout(props) {
-  const {
-    backgroundClassName, backgroundImage, children, classes,
-  } = props;
+  const { backgroundImage, children, classes } = props;
 
   return (
     <section className={classes.root}>
@@ -56,7 +53,7 @@ function ProductHeroLayout(props) {
         {children}
         <div className={classes.backdrop} />
         <div
-          className={clsx(classes.background, backgroundClassName)}
+          className={classes.background}
           style={{ backgroundImage: `url(${backgroundImage})` }}
         />
       </Container>
@@ -65,7 +62,6 @@ function ProductHeroLayout(props) {
 }
 
 ProductHeroLayout.propTypes = {
-  backgroundClassName: PropTypes.string.isRequired,
   children: PropTypes.node,
   backgroundImage: PropTypes.string,
   classes: PropTypes.object,

@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import { Grid } from '@material-ui/core';
 import Typography from '../../components/Typography';
-import ImageModal from './ImageModal';
 
 const styles = theme => ({
   imageWrapper: {
@@ -12,7 +11,7 @@ const styles = theme => ({
     display: 'block',
     padding: 0,
     borderRadius: 0,
-    height: '28vh',
+    height: '38vh',
     transitionDelay: '2s',
     [theme.breakpoints.down('sm')]: {
       width: '100% !important',
@@ -22,7 +21,7 @@ const styles = theme => ({
       zIndex: 1,
     },
     '&:hover $imageBackdrop': {
-      opacity: 0.1,
+      opacity: 0.3,
     },
     '&:hover $imageMarked': {
       opacity: 0,
@@ -55,7 +54,7 @@ const styles = theme => ({
     top: 0,
     bottom: 0,
     background: theme.palette.common.black,
-    opacity: 0.01,
+    opacity: 0.5,
     transition: theme.transitions.create('opacity'),
   },
   imageTitle: {
@@ -75,18 +74,12 @@ const ProductCategoriesDetail = (props) => {
   const {
     classes, image, matches,
   } = props;
-  const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
-
-  function handleModalOpen() {
-    setIsImageModalOpen(true);
-  }
 
   return (
     <React.Fragment>
       <ButtonBase
         key={image.title}
         className={classes.imageWrapper}
-        onClick={handleModalOpen}
         style={{
           width: image.width,
           height: image.height,
@@ -129,13 +122,6 @@ const ProductCategoriesDetail = (props) => {
           </div>
         ) : null}
       </ButtonBase>
-
-      <ImageModal
-        isImageModalOpen={isImageModalOpen}
-        setIsImageModalOpen={setIsImageModalOpen}
-        image={image}
-      />
-
     </React.Fragment>
   );
 };

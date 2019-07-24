@@ -1,21 +1,17 @@
 import React, { useState, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import {
-  withStyles,
-  Stepper,
-  Step,
-  StepLabel,
-  StepContent,
+  makeStyles, Stepper, Step,
+  StepLabel, StepContent,
 } from '@material-ui/core';
 import axios from '../../utils/axios';
-
-import Usertype from './Usertype';
 import RegistForm from './RegistForm';
 import PaperSheet from './Paper';
 import AppAppBar from '../Main/views/Layout/AppAppBar';
 import HOST from '../../config';
+import withRoot from '../Main/withRoot';
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
@@ -36,7 +32,7 @@ const styles = theme => ({
   resetContainer: {
     padding: theme.spacing(1) * 3,
   },
-});
+}));
 
 const initialState = {
   passwordValue: '',
@@ -102,11 +98,9 @@ const myReducer = (state, action) => {
 };
 
 const RegistStepper = (props) => {
-  const {
-    classes, history,
-  } = props;
+  const { history } = props;
+  const classes = useStyles();
   const [activeStep, setStep] = useState(0);
-  const [userType, setType] = useState(0);
   const [userInfo, setInfo] = useState({});
   const [state, dispatch] = useReducer(myReducer, initialState);
   const [loading, setLoading] = useState(0);
@@ -122,10 +116,6 @@ const RegistStepper = (props) => {
   const handleReset = () => {
     dispatch({ type: 'reset' });
     setStep(0);
-  };
-
-  const typeChange = (type) => {
-    setType(type);
   };
 
   const handleUserInfo = (user) => {
@@ -151,21 +141,14 @@ const RegistStepper = (props) => {
 
   return (
     <div className={classes.root}>
-      <AppAppBar unuse={false} />
+      <AppAppBar history={history} />
       <div className={classes.container}>
 
         <Stepper activeStep={activeStep} orientation="vertical">
-          <Step key="0">
-            <StepLabel>사업자 유형 선택</StepLabel>
-            <StepContent>
-              <Usertype typeChange={typeChange} handleNext={handleNext} />
-            </StepContent>
-          </Step>
           <Step key="1">
             <StepLabel>개인정보 입력</StepLabel>
             <StepContent>
               <RegistForm
-                userType={userType}
                 handleNext={handleNext}
                 handleBack={handleBack}
                 handleUserInfo={handleUserInfo}
@@ -194,11 +177,6 @@ const RegistStepper = (props) => {
 
 RegistStepper.propTypes = {
   history: PropTypes.object.isRequired,
-  classes: PropTypes.object,
 };
 
-RegistStepper.defaultProps = {
-  classes: {},
-};
-
-export default withStyles(styles)(RegistStepper);
+export default withRoot(RegistStepper);

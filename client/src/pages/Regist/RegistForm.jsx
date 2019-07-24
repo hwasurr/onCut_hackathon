@@ -51,6 +51,7 @@ const styles = theme => ({
   button: {
     marginTop: theme.spacing(1),
     marginRight: theme.spacing(1),
+    color: theme.palette.common.white,
   },
   actionsContainer: {
     marginBottom: theme.spacing(2),
@@ -354,12 +355,6 @@ const RegistForm = (props) => {
           ))}
         </TextField>
         <div className={classes.actionsContainer}>
-          <Button
-            onClick={handleBack}
-            className={classes.button}
-          >
-        뒤로
-          </Button>
           <Button
             variant="contained"
             color="primary"

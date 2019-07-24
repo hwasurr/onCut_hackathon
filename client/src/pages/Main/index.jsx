@@ -8,7 +8,7 @@ import withRoot from './withRoot';
 import HOST from '../../config';
 
 const heroInfo = {
-  backImage: '/pngs/main_image.jpg',
+  backImage: '/pngs/main/main_category_4.jpg',
 };
 
 const useLoginValue = (history, location) => {

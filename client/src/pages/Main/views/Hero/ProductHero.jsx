@@ -1,15 +1,12 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import { grey } from '@material-ui/core/colors';
 import Grow from '@material-ui/core/Grow';
-import axios from '../../../../utils/axios';
 import Button from '../../components/Button';
 import Typography from '../../components/Typography';
 import ProductHeroLayout from './ProductHeroLayout';
-import LoginForm from '../Login/LoginForm';
-import HOST from '../../../../config';
 
 const styles = makeStyles(theme => ({
   background: {
@@ -85,53 +82,18 @@ const styles = makeStyles(theme => ({
   },
 }));
 
-function useDialog() {
-  const [open, setOpen] = useState(false);
-  const [isMarketer, setIsMarketer] = useState();
-  function handleOpen(buttonType) {
-    setIsMarketer(buttonType === 'marketer');
-    setOpen(true);
-  }
-  function handleClose() {
-    setOpen(false);
-  }
-  return {
-    open, isMarketer, handleOpen, handleClose,
-  };
-}
-
 function ProductHero(props) {
   const {
     text, backgroundImage, isLogin, history,
   } = props;
-
-  const {
-    open, isMarketer, handleOpen, handleClose,
-  } = useDialog();
   const classes = styles();
 
   // const [check] = React.useState(true);
 
-  const handleClick = useCallback((buttonType) => {
-    axios.get(`${HOST}/api/dashboard/checkUserType`)
-      .then((res) => {
-        const { userType } = res.data;
-        if (userType === undefined) {
-          if (buttonType) {
-            handleOpen(buttonType);
-          } else {
-            // 로그인 이후 이용하세요
-            alert('로그인 이후 이용하세요');
-          }
-        } else if (userType === 'marketer') {
-          history.push('/dashboard/marketer/main');
-        } else if (userType === 'creator') {
-          history.push('/dashboard/creator/main');
-        }
-      }).catch((err) => {
-        console.log(err);
-      });
-  }, [handleOpen, history]);
+  const handleClick = useCallback(() => {
+    // handle login Click
+    history.push('/dashboard/main');
+  });
 
   return (
     <ProductHeroLayout
@@ -195,16 +157,7 @@ function ProductHero(props) {
                 classnames([classes.button], [classes.loginButton], [classes.loginButtonLeft])}
               onClick={() => handleClick('marketer')}
             >
-              광고주로 로그인
-            </Button>
-            <Button
-              color="primary"
-              variant="outlined"
-              className={
-                classnames([classes.button], [classes.loginButton], [classes.loginButtonRight])}
-              onClick={() => handleClick('creator')}
-            >
-              크리에이터 로그인
+              OnCut 이용하기
             </Button>
           </div>
 
@@ -212,21 +165,6 @@ function ProductHero(props) {
 
       )}
 
-      {text.tail && (
-        <Typography
-          className={classes.h6}
-          variant="subtitle2"
-        >
-          {text.tail}
-        </Typography>
-      )}
-
-      <LoginForm
-        open={open}
-        isMarketer={isMarketer}
-        history={history}
-        handleClose={handleClose}
-      />
     </ProductHeroLayout>
   );
 }
@@ -239,10 +177,9 @@ ProductHero.propTypes = {
 ProductHero.defaultProps = {
   backgroundImage: '',
   text: {
-    title: '배너광고의 새로운 기준',
-    subTitle: 'ONAD',
-    body: '온애드는 크리에이터와 광고주를 연결해주는 실시간 광고 송출 플랫폼입니다.',
-    // tail: '베너광고에 필요한 모든 과정을 온애드에서 손쉽게 진행하실 수 있습니다.',
+    title: '재미있는 컨텐츠는 어디에?',
+    subTitle: 'ONCUT',
+    body: 'OnCut은 채팅 로그 텍스트분석을 통한 하이라이트 지점을 찾아줍니다.',
   },
 };
 

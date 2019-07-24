@@ -6,15 +6,11 @@ import {
   Paper,
   Typography,
   withStyles,
-  FormControlLabel,
-  Checkbox,
-  Divider,
   Button,
 } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import shortid from 'shortid';
 import Dialog from '../Dashboard/components/Dialog/Dialog';
-import terms from './registConfig';
 
 const styles = theme => ({
   root: {
@@ -121,38 +117,6 @@ const PaperSheet = (props) => {
             <Typography variant="h6" component="h6" style={{ textAlign: 'center' }}>
           While:True
             </Typography>
-            {terms.map(term => (
-              <Paper className={classes.container} elevation={1} key={term.state}>
-                <Typography component="p" style={{ flex: 8, fontSize: 13 }}>
-                  {term.title}
-                </Typography>
-                <Button
-                  style={{
-                    flex: 1, backgroundColor: '#d6d6d6', height: '70%', fontSize: 13,
-                  }}
-                  onClick={handleOpen(term)}
-                >
-                약관보기
-                </Button>
-                <Divider className={classes.divider} />
-                <FormControlLabel
-                  control={(
-                    <Checkbox
-                // checked={this.getChange(term.state)}
-                      onChange={handleChange(term.state)}
-                      value={term.state}
-                      classes={{
-                        root: classes.checkboxRoot,
-                        checked: classes.checked,
-                      }}
-                    />
-              )}
-                  label="동의"
-                  style={{ flex: 2, marginRight: 0 }}
-                />
-              </Paper>
-
-            ))}
           </Paper>
         )
 
@@ -182,7 +146,7 @@ const PaperSheet = (props) => {
         buttons={(
           <div>
             <Button onClick={handleClose}>
-                    취소
+                취소
             </Button>
           </div>
             )}
