@@ -1,0 +1,59 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.0.2",
+    "@material-ui/icons": "^3.0.2",
+    "@material-ui/lab": "^4.0.0-alpha.15",
+    "@material-ui/styles": "^4.1.2",
+    "@material-ui/utils": "^4.0.0-beta.1",
+    "axios": "^0.18.0",
+    "babel-jest": "24.7.1",
+    "chart.js": "^2.8.0",
+    "classnames": "^2.2.6",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^4.2.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-react-hooks": "^1.6.1",
+    "history": "^4.9.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-chartjs-2": "^2.7.6",
+    "react-dom": "^16.8.6",
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "3.0.0",
+    "react-text-mask": "^5.4.3",
+    "shortid": "^2.2.14"
+  },
+  "scripts": {
+    "start:mac": "PORT=3001 react-scripts start",
+    "start": "set PORT=3001 && react-scripts start",
+    "build": "NODE_ENV=production HOST=$HOST react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "semi": true,
+    "useTabs": false,
+    "tabWidth": 2,
+    "trailingComma": "all",
+    "printWidth": 80
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.0"
+  }
+}
