@@ -45,26 +45,10 @@ const sliderStyle = theme => ({
   },
 });
 
-const marks = [
-  { value: 0, label: '0' },
-  { value: 20, label: '2' },
-  { value: 37, label: '3' },
-  { value: 54, label: '4' },
-  { value: 56, label: '5' },
-  { value: 60, label: '6' },
-  { value: 64, label: '7' },
-  { value: 72, label: '8' },
-  { value: 74, label: '9' },
-  { value: 88, label: '10' },
-];
-
 function HighlightSlider(props) {
-  const { ...rest } = props;
-  const [value, setValue] = React.useState(1);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  const {
+    sliderValue, sliderHandleChange, marks, ...rest
+  } = props;
 
   function valuetext(index) {
     return `${index} 번째 구간의 편집점`;
@@ -72,10 +56,10 @@ function HighlightSlider(props) {
 
   return (
     <Slider
-      value={value}
+      value={sliderValue}
       step={null}
       marks={marks}
-      onChange={handleChange}
+      onChange={sliderHandleChange}
       // marks
       valueLabelDisplay="on"
       aria-labelledby="range-slider"

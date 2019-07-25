@@ -6,6 +6,7 @@ import { createBrowserHistory } from 'history';
 import RegistStepper from './pages/Regist/Stepper';
 import Main from './pages/Main';
 import Dashboard from './pages/Dashboard/layouts/DashboardLayout';
+import Pricing from './pages/Pricing/Pricing';
 import * as serviceWorker from './serviceWorker';
 
 
@@ -15,6 +16,7 @@ ReactDOM.render(
   <Router history={history}>
     <Route exact path="/" component={Main} history={history} />
     <Route exact path="/regist" component={RegistStepper} />
+    <Route exact path="/pricing" component={Pricing} history={history} />
     <Route path="/dashboard" component={Dashboard} history={history} />
   </Router>,
 

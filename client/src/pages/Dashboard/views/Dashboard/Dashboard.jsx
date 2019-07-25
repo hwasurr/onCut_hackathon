@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 // for chart
 import { Line } from 'react-chartjs-2';
@@ -20,78 +20,42 @@ import CardHeader from '../../components/Card/CardHeader';
 import CardIcon from '../../components/Card/CardIcon';
 import CardBody from '../../components/Card/CardBody';
 
+import timeFunc from '../../../../utils/timeFunc';
 import TwitchVod from './sub/TwitchVod';
 import Table from './sub/Table';
 import HighlightSlider from './sub/HighlightSlider';
 import DatePicker from './sub/DatePicker';
 import PercentageSelect from './sub/PercentageSelect';
-// import PercentagePicker from './sub/PercentagePicker';
-// settings
-import axios from '../../../../utils/axios';
 
-// 상수
-const data = {
-  tableData: {
-    columns: ['하이라이트 시간', '채팅빈도', '재미점수'],
-    data: [
-      ['20:50:00', '24', '21'],
-      ['20:51:00', '26', '44'],
-      ['21:41:00', '32', '23'],
-      ['22:56:00', '45', '37'],
-      ['23:25:00', '21', '21'],
-      ['01:53:00', '22', '31'],
-      ['02:25:00', '21', '44'],
-      ['02:26:00', '19', '12'],
-      ['02:27:00', '17', '23'],
-      ['03:05:00', '15', '34'],
-    ],
-  },
-  wordcloud: [
-    '2019-02-02 20_50_00_yapyap30',
-    '2019-02-02 20_51_00_yapyap30',
-    '2019-02-02 21_41_00_yapyap30',
-    '2019-02-02 22_56_00_yapyap30',
-    '2019-02-02 23_25_00_yapyap30',
-    '2019-02-02 01_53_00_yapyap30',
-    '2019-02-02 02_26_00_yapyap30',
-    '2019-02-02 02_27_00_yapyap30',
-    '2019-02-02 03_05_00_yapyap30',
-    '2019-02-02 02_25_00_yapyap30',
-  ],
-};
+// datesets
+import constantVariables from '../../variables/constantVariables';
 
-const videoIds = [
-  '456375670',
-  '456617624',
-  '457705610',
-  '455854721',
-];
-
-const chartData = {
-  labels: [1, 2, 3, 4, 5],
-  totalIncomeData: [12, 12, 12, 13, 14],
-};
+const {
+  data, videoIds, marks, chartData, sentimentalChartData,
+} = constantVariables;
 
 function useVideoId() {
   // *******************************************
   // video Id
   const [videoId, setVideoId] = useState(videoIds[0]);
+  const [targetTime, setTargetTime] = useState(null);
   const handleVideo = () => {
     videoIds.forEach((value, index) => {
-      console.log('videoId: ', videoId, '테이블밸류: ', value);
       if (videoId === value) {
-        console.log('videoId === value');
         if (videoIds.length >= index + 1) {
           setVideoId(videoIds[index + 1]);
-        } else {
-          setVideoId(videoIds[0]);
         }
       }
     });
   };
-  // *******************************************
 
-  return { videoId, handleVideo };
+  const handleVideoByTime = (target) => {
+    setTargetTime(target);
+  };
+
+  return {
+    videoId, handleVideo, targetTime, handleVideoByTime,
+  };
 }
 
 function useDatePicker(handleVideo) {
@@ -106,16 +70,67 @@ function useDatePicker(handleVideo) {
   return { selectedDate, handleDateChange };
 }
 
+function useSelectedTime() {
+  const [selectedTime, setSelectedTime] = React.useState(data.tableData.data[0][0]);
+
+  const handleSelectedTime = (newTime) => {
+    setSelectedTime(newTime);
+  };
+
+  return { selectedTime, handleSelectedTime };
+}
+
+function useSlider(videoByTime, handleSelectedTime, handleWordCloudChange) {
+  const [sliderValue, setSliderValue] = React.useState(18);
+
+  const sliderHandleChange = (event, newValue) => {
+    setSliderValue(newValue);
+    handleWordCloudChange();
+    // newValue 가 marks 의 몇번째 인덱스인지 파악
+    let target;
+    marks.forEach((mark, index) => {
+      if (newValue === mark.value) {
+        // tableData의 해당 인덱스
+        const t = data.tableData.data[index][0];
+        const splitedT = t.split(':');
+        target = `${splitedT[0]}h${splitedT[1]}m${splitedT[2]}s`;
+        handleSelectedTime(t);
+      }
+    });
+
+    videoByTime(target);
+  };
+
+  return { sliderValue, sliderHandleChange };
+}
+
+function useWordCloud() {
+  const [wordCloud, setWordCloud] = React.useState(data.wordcloud[0]);
+
+  function handleWordCloudChange() {
+    data.wordcloud.forEach((value, index) => {
+      if (value === wordCloud) {
+        if (data.wordcloud.length >= index + 1) {
+          setWordCloud(data.wordcloud[index + 1]);
+          console.log(wordCloud);
+        }
+      }
+    });
+  }
+  return { wordCloud, handleWordCloudChange };
+}
+
 const Dashboard = (props) => {
   const { classes, history } = props;
-  const { videoId, handleVideo } = useVideoId();
+  const {
+    videoId, handleVideo, targetTime, handleVideoByTime,
+  } = useVideoId();
+  const { selectedTime, handleSelectedTime } = useSelectedTime();
+  const { wordCloud, handleWordCloudChange } = useWordCloud();
   const { selectedDate, handleDateChange } = useDatePicker(handleVideo);
-
-  /**
-   * threshold 설정
-   */
-
-  // ****************************************
+  const {
+    sliderValue, sliderHandleChange,
+  } = useSlider(handleVideoByTime, handleSelectedTime, handleWordCloudChange);
 
   return (
     <div>
@@ -123,6 +138,7 @@ const Dashboard = (props) => {
       <GridContainer>
         <GridItem xs={12} sm={6} md={8}>
 
+          {/* Twitch VOD */}
           <GridItem xs={12} sm={6} md={12}>
             <Card>
               {videoId === null ? (
@@ -139,21 +155,29 @@ const Dashboard = (props) => {
               ) : (
                 <TwitchVod
                   videoId={videoId}
+                  time={targetTime}
                 />
               )}
             </Card>
           </GridItem>
 
+          {/* 하이라이트 포인트 바 */}
           <GridItem xs={12} sm={6} md={12}>
             {/* <Typography variant="h5">슬라이더를 통해 하이라이트 포인트를 구현</Typography> */}
             <Tooltip title="하이라이트 포인트를 선택하세요!" placement="left-start">
-              <HighlightSlider />
+              <HighlightSlider
+                sliderValue={sliderValue}
+                sliderHandleChange={sliderHandleChange}
+                marks={marks}
+              />
             </Tooltip>
           </GridItem>
 
         </GridItem>
 
         <GridItem xs={12} sm={6} md={4}>
+
+          {/* 날짜 및 개수 설정 */}
           <GridItem xs={12} sm={6} md={12}>
             <Card>
               <CardHeader color="blueGray" stats icon>
@@ -164,13 +188,18 @@ const Dashboard = (props) => {
                 <h4 className={classes.cardTitle}>설정</h4>
               </CardHeader>
               <CardBody>
-                <DatePicker selectedDate={selectedDate} handleDateChange={handleDateChange} />
+                <DatePicker
+                  selectedDate={selectedDate}
+                  handleDateChange={handleDateChange}
+
+                />
                 <PercentageSelect />
               </CardBody>
 
             </Card>
           </GridItem>
 
+          {/* 해당 포인트의 시간대 */}
           <GridItem xs={12} sm={6} md={12}>
             <Card>
               <CardHeader color="blueGray" stats icon>
@@ -180,8 +209,8 @@ const Dashboard = (props) => {
                 <p className={classes.cardTitle}>해당 포인트의 시간대</p>
                 <h4 className={classes.cardTitle}>시간 정보</h4>
               </CardHeader>
-              <CardBody>
-                <h4>selectedTime ~ selectedTime</h4>
+              <CardBody style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <h3>{`${selectedTime}  ~ ${timeFunc.addTime(selectedTime, 600)}`}</h3>
               </CardBody>
 
             </Card>
@@ -192,7 +221,7 @@ const Dashboard = (props) => {
 
 
       <GridContainer>
-        {/* 테이블 및 차트 */}
+        {/* 하이라이트 포인트 테이블 */}
         <GridItem xs={12} sm={6} md={6}>
           <Card>
             <CardHeader color="blueGray">
@@ -214,14 +243,14 @@ const Dashboard = (props) => {
         <GridItem xs={12} sm={6} md={6}>
           <Card>
             <CardHeader color="blueGray">
-              <h4 className={classes.cardTitleWhite}>구간의 단어빈도</h4>
+              <h4 className={classes.cardTitleWhite}>해당구간의 단어 빈도</h4>
               <p className={classes.cardTitleWhite}>
                 썸네일 생성에 도움을 줄 수 있습니다.
               </p>
             </CardHeader>
             <CardBody>
               <img
-                src={`/pngs/wordcloud/${data.wordcloud[0]}.png`}
+                src={`/pngs/wordcloud/${wordCloud}.png`}
                 width="100%"
                 height="343vh"
                 alt=""
@@ -230,37 +259,44 @@ const Dashboard = (props) => {
           </Card>
         </GridItem>
 
-        {/* 차트 */}
+        {/* 10분 단위 시청자 수 추이 차트1 */}
         <GridItem xs={12} sm={6} md={6}>
           <Card>
             <CardHeader color="blueGray">
-              <h4 className={classes.cardTitleWhite}>하이라이트 구간 차트</h4>
+              <h4 className={classes.cardTitleWhite}>10분단위 시청자 수 추이</h4>
               <p className={classes.cardTitleWhite}>
-                해당 방송의 시간대별 점수입니다.
+                해당 방송의 시청자 수 추이입니다.
               </p>
             </CardHeader>
             <CardBody>
-              <Line
-                data={setChartjsData(chartData.labels, chartData.totalIncomeData)}
-                options={{ tooltips: { mode: 'index', intersect: false } }}
-              />
+              {chartData && (
+                <Line
+                  data={setChartjsData(chartData.labels,
+                    chartData.totalIncomeData)}
+                  options={{ tooltips: { mode: 'index', intersect: false } }}
+                />
+              )}
             </CardBody>
           </Card>
         </GridItem>
 
+        {/* 10분 단위 감정 분석 차트2 */}
         <GridItem xs={12} sm={6} md={6}>
           <Card>
             <CardHeader color="blueGray">
-              <h4 className={classes.cardTitleWhite}>하이라이트 구간 차트</h4>
+              <h4 className={classes.cardTitleWhite}>10분 단위 감성 점수</h4>
               <p className={classes.cardTitleWhite}>
-                해당 방송의 시간대별 점수입니다.
+                해당 방송의 10분 단위의 감성 점수입니다.
               </p>
             </CardHeader>
             <CardBody>
               <Line
-                data={setChartjsData(chartData.labels, chartData.totalIncomeData)}
+                data={setChartjsData(sentimentalChartData.labels,
+                  sentimentalChartData.totalIncomeData,
+                  '감성 점수')}
                 options={{ tooltips: { mode: 'index', intersect: false } }}
               />
+
             </CardBody>
           </Card>
         </GridItem>

@@ -4,16 +4,34 @@ const chartTheme = {
     '#67b7dc', '#6794dc', '#6771dc', '#8067dc', '#a367dc', '#c767dc',
     '#dc67ce', '#dc67ab', '#dc6788', '#dc6967', '#dc8c67', '#dcaf67',
     '#67b7dc', '#6794dc', '#6771dc', '#8067dc', '#a367dc', '#c767dc',
-    '#dc67ce', '#dc67ab', '#dc6788', '#dc6967', '#dc8c67', '#dcaf67'],
+    '#dc67ce', '#dc67ab', '#dc6788', '#dc6967', '#dc8c67', '#dcaf67',
+    '#67b7dc', '#6794dc', '#6771dc', '#8067dc', '#a367dc', '#c767dc',
+    '#dc67ce', '#dc67ab', '#dc6788', '#dc6967', '#dc8c67', '#dcaf67',
+    '#67b7dc', '#6794dc', '#6771dc', '#8067dc', '#a367dc', '#c767dc',
+    '#dc67ce', '#dc67ab', '#dc6788', '#dc6967', '#dc8c67', '#dcaf67',
+    '#67b7dc', '#6794dc', '#6771dc', '#8067dc', '#a367dc', '#c767dc',
+    '#dc67ce', '#dc67ab', '#dc6788', '#dc6967', '#dc8c67', '#dcaf67',
+    '#67b7dc', '#6794dc', '#6771dc', '#8067dc', '#a367dc', '#c767dc',
+    '#dc67ce', '#dc67ab', '#dc6788', '#dc6967', '#dc8c67', '#dcaf67',
+  ],
   second: [
     '#67b7fe', '#6794fc', '#6771fc', '#8067fc', '#a367fc', '#c767fc',
     '#dc67ee', '#dc67cb', '#dc6799', '#dc6987', '#dc8c87', '#dcaf87',
     '#67b7fe', '#6794fc', '#6771fc', '#8067fc', '#a367fc', '#c767fc',
-    '#dc67ee', '#dc67cb', '#dc6799', '#dc6987', '#dc8c87', '#dcaf87'],
+    '#dc67ee', '#dc67cb', '#dc6799', '#dc6987', '#dc8c87', '#dcaf87',
+    '#67b7fe', '#6794fc', '#6771fc', '#8067fc', '#a367fc', '#c767fc',
+    '#dc67ee', '#dc67cb', '#dc6799', '#dc6987', '#dc8c87', '#dcaf87',
+    '#67b7fe', '#6794fc', '#6771fc', '#8067fc', '#a367fc', '#c767fc',
+    '#dc67ee', '#dc67cb', '#dc6799', '#dc6987', '#dc8c87', '#dcaf87',
+    '#67b7fe', '#6794fc', '#6771fc', '#8067fc', '#a367fc', '#c767fc',
+    '#dc67ee', '#dc67cb', '#dc6799', '#dc6987', '#dc8c87', '#dcaf87',
+    '#67b7fe', '#6794fc', '#6771fc', '#8067fc', '#a367fc', '#c767fc',
+    '#dc67ee', '#dc67cb', '#dc6799', '#dc6987', '#dc8c87', '#dcaf87',
+  ],
 };
 
 // 차트 데이터
-function setChartjsData(labels, data, label = '수익금') {
+function setChartjsData(labels, data, label = '시청자 수') {
   const ChartjsLineData = {
     labels,
     datasets: [
@@ -30,11 +48,11 @@ function setChartjsData(labels, data, label = '수익금') {
         pointBorderColor: chartTheme.first,
         pointBackgroundColor: chartTheme.first,
         pointBorderWidth: 1,
-        pointHoverRadius: 14,
+        pointHoverRadius: 6,
         pointHoverBackgroundColor: chartTheme.second,
         pointHoverBorderColor: '#fff',
         pointHoverBorderWidth: 2,
-        pointRadius: 8,
+        pointRadius: 4,
         pointHitRadius: 10,
         data,
       },

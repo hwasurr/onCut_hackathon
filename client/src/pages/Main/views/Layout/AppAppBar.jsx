@@ -71,10 +71,13 @@ function AppAppBar(props) {
   const handleClick = (clickType) => {
     switch (clickType) {
       case 'login':
-        history.push('/login');
+        history.push('/dashboard/main');
         break;
       case 'regist':
         history.push('/regist');
+        break;
+      case 'pricing':
+        history.push('/pricing');
         break;
       case 'toDashboard':
         history.push('/dashboard');
@@ -143,6 +146,15 @@ function AppAppBar(props) {
           </Button>
 
           <div className={classes.rightDesktop}>
+            <Button
+              color="inherit"
+              className={classes.rightLink}
+              component={Link}
+              to="/pricing"
+            >
+            요금안내
+
+            </Button>
             <LogButton history={history} logout={logout} />
             <RegButton history={history} logout={logout} />
           </div>
