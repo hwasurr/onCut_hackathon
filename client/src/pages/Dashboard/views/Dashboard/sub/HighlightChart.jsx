@@ -3,10 +3,10 @@ import { Line } from 'react-chartjs-2';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
-import axios from '../../../../utils/axios';
+import axios from '../../../../../utils/axios';
 
-import setChartjsData from '../../variables/charts';
-import HOST from '../../../../config';
+import setChartjsData from '../../../variables/charts';
+import HOST from '../../../../../config';
 // data Fetch hooks
 function useFetchData(url, dateRange) {
   const [payload, setPayload] = useState(null);

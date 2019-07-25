@@ -1,86 +1,44 @@
-import React, {
-  useState, useEffect, useCallback,
-} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 // @material-ui/core
 import withStyles from '@material-ui/core/styles/withStyles';
-// @material-ui/icons
-import ListAlt from '@material-ui/icons/ListAlt';
-import BarChart from '@material-ui/icons/BarChart';
-
 // material core
-import CircularProgress from '@material-ui/core/CircularProgress';
-import axios from '../../../../utils/axios';
-
+// import Typography from '@material-ui/core/Typography';
+import Settings from '@material-ui/icons/Settings';
+import Add from '@material-ui/icons/Add';
 // core ../../../components
+import Tooltip from '@material-ui/core/Tooltip';
 import dashboardStyle from '../../assets/jss/onad/views/dashboardStyle';
 import GridContainer from '../../components/Grid/GridContainer';
 import GridItem from '../../components/Grid/GridItem';
-import CustomTabs from '../../components/CustomTabs/CustomTabs';
-import Table from '../../components/Table/Table';
-import HighlightChart from './HighlightChart';
-// Typography
+import Card from '../../components/Card/Card';
+import CardHeader from '../../components/Card/CardHeader';
+import CardIcon from '../../components/Card/CardIcon';
+import CardBody from '../../components/Card/CardBody';
+
+import TwitchVod from './sub/TwitchVod';
+import Table from './sub/Table';
+import HighlightSlider from './sub/HighlightSlider';
+import DatePicker from './sub/DatePicker';
+import PercentageSelect from './sub/PercentageSelect';
+// import PercentagePicker from './sub/PercentagePicker';
+// settings
+import axios from '../../../../utils/axios';
 import HOST from '../../../../config';
 // 상수
-const WAIT_BANNER_STATE = 1; // 대기중 배너 스테이트
-
-// data Fetch hooks
-function useFetchData(url, dateRange) {
-  const [payload, setPayload] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  // get data function
-  const callUrl = useCallback(async () => {
-    try {
-      const res = await axios.get(url, {
-        params: { dateRange },
-      });
-      if (res.data.length !== 0) {
-        setPayload(res.data);
-      } else {
-        // setPayload(res.data);
-        setError('데이터가 없습니다.');
-        // throw new Error('데이터가 존재하지   않습니다');
-      }
-    } catch {
-      setError('오류입니다.');
-    } finally {
-      setLoading(false);
-    }
-  }, [dateRange, url]);
-
-  useEffect(() => {
-    callUrl();
-  }, [callUrl]);
-
-  return { payload, loading, error };
-}
-
-function useAdStartDialog() {
-  const [DialogOpen, setDialogOpen] = useState(false);
-  const [selectedBanner, setSelectedBanner] = useState({});
-
-  function handleDialogOpen(img) {
-    setSelectedBanner(img);
-    setDialogOpen(true);
-  }
-
-  function handleDialogClose() {
-    setDialogOpen(false);
-  }
-
-  return {
-    DialogOpen, handleDialogOpen, handleDialogClose, selectedBanner,
-  };
-}
-
 const tableData = {
   payload: {
-    columns: ['col1', 'col2', 'col3'],
+    columns: ['하이라이트 시간', '채팅빈도', '재미점수'],
     data: [
-      ['1', '2', '3'],
-      ['1', '2', '3'],
+      ['19:01:12', '2', '3'],
+      ['19:01:12', '2', '3'],
+      ['19:01:12', '2', '3'],
+      ['19:01:12', '2', '3'],
+      ['19:01:12', '2', '3'],
+      ['19:01:12', '2', '3'],
+      ['19:01:12', '2', '3'],
+      ['19:01:12', '2', '3'],
+      ['19:01:12', '2', '3'],
     ],
   },
 };
@@ -88,69 +46,110 @@ const tableData = {
 const Dashboard = (props) => {
   const { classes, history } = props;
 
-  // const tableData = useFetchData(`${HOST}/api/dashboard/marketer/creatorList`);
+  const [creatorName, setCreatorName] = useState(null);
 
-  // 충전 및 환불 페이지네이션
-  const [page, setPage] = React.useState(0); // 테이블 페이지
-  const [rowsPerPage, setRowsPerPage] = React.useState(7); // 테이블 페이지당 행
-  const emptyRows = rowsPerPage - Math.min(
-    rowsPerPage, tableData.length - page * rowsPerPage,
-  );
-
-  // page handler
-  function handleChangeTablePage(event, newPage) {
-    setPage(newPage);
-  }
-  // page per row handler
-  function handleChangeTableRowsPerPage(event) {
-    setRowsPerPage(parseInt(event.target.value, 10));
+  function valuetext(value) {
+    return `${value}°C`;
   }
 
   return (
     <div>
       {/* 광고 될 크리에이터 목록 */}
       <GridContainer>
-        <GridItem xs={12} sm={6} md={12}>
-          { !tableData.loading && tableData.payload
-          && (
-          <CustomTabs
-            headerColor="blueGray"
-            tabs={[
-              {
-                tabName: '하이라이트 포인트',
-                tabIcon: ListAlt,
-                tabContent: (
-                  tableData.loading && !tableData.payload ? (
-                    <div style={{ textAlign: 'center' }}><CircularProgress /></div>
-                  ) : (
-                    <div>
-                      {tableData.payload !== null
-                      && (
-                        <Table
-                          tableHeaderColor="danger"
-                          tableHead={tableData.payload.columns}
-                          tableData={tableData.payload.data}
-                          pagination
-                          handleChangeTablePage={handleChangeTablePage}
-                          handleChangeTableRowsPerPage={handleChangeTableRowsPerPage}
-                          emptyRows={emptyRows}
-                          rowsPerPage={rowsPerPage}
-                          page={page}
-                        />
-                      )}
-                    </div>
-                  )
-                ),
-              },
-              {
-                tabName: '워드클라우드',
-                tabIcon: BarChart,
-                tabContent: <HighlightChart />,
-              },
-            ]}
-          />
-          )
-        }
+        <GridItem xs={12} sm={6} md={8}>
+
+          <GridItem xs={12} sm={6} md={12}>
+            <Card>
+              <TwitchVod
+                creatorName="handongsuk"
+              />
+            </Card>
+          </GridItem>
+
+          <GridItem xs={12} sm={6} md={12}>
+            {/* <Typography variant="h5">슬라이더를 통해 하이라이트 포인트를 구현</Typography> */}
+            <Tooltip title="하이라이트 포인트를 선택하세요!" placement="left-start">
+              <HighlightSlider />
+            </Tooltip>
+          </GridItem>
+
+        </GridItem>
+
+        <GridItem xs={12} sm={6} md={4}>
+          <GridItem xs={12} sm={6} md={12}>
+            <Card>
+              <CardHeader color="blueGray" stats icon>
+                <CardIcon color="blueGray">
+                  <Settings />
+                </CardIcon>
+                <p className={classes.cardCategory}>상세한 설정</p>
+                <h4 className={classes.cardTitle}>설정</h4>
+              </CardHeader>
+              <CardBody>
+                <DatePicker />
+                <PercentageSelect />
+              </CardBody>
+
+            </Card>
+          </GridItem>
+
+          <GridItem xs={12} sm={6} md={12}>
+            <Card>
+              <CardHeader color="blueGray" stats icon>
+                <CardIcon color="blueGray">
+                  <Add />
+                </CardIcon>
+                <p className={classes.cardCategory}>하이라이트 포인트의</p>
+                <h4 className={classes.cardTitle}>상세 정보</h4>
+              </CardHeader>
+              <CardBody>
+                <DatePicker />
+              </CardBody>
+
+            </Card>
+          </GridItem>
+        </GridItem>
+
+      </GridContainer>
+
+
+      <GridContainer>
+        {/* 테이블 및 차트 */}
+        <GridItem xs={12} sm={6} md={6}>
+          <Card>
+            <CardHeader color="blueGray">
+              <h4 className={classes.cardTitleWhite}>세부 정보</h4>
+              <p className={classes.cardCategoryWhite}>
+                하이라이트 포인트의 세부 정보입니다
+              </p>
+            </CardHeader>
+            <CardBody>
+              { !tableData.loading && tableData.payload
+                && (
+                  <Table tableData={tableData} />
+                )}
+            </CardBody>
+          </Card>
+        </GridItem>
+
+        {/* 워드클라우드 */}
+        <GridItem xs={12} sm={6} md={6}>
+          <Card>
+            <CardHeader color="blueGray">
+              <h4 className={classes.cardTitleWhite}>구간의 단어빈도</h4>
+              <p className={classes.cardCategoryWhite}>
+                썸네일 생성에 도움을 줄 수 있습니다.
+              </p>
+            </CardHeader>
+            <CardBody>
+              <img
+                src="/pngs/wordcloud/2019-02-02 20_51_00_yapyap30.png"
+                width="100%"
+                height="343vh"
+                alt=""
+              />
+            </CardBody>
+          </Card>
         </GridItem>
       </GridContainer>
     </div>

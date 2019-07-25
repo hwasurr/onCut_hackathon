@@ -46,7 +46,7 @@ const MarketerDashboard = ({
     <div className={classes.wrapper}>
       <Sidebar
         routes={allRoutes.oncut}
-        logoText="OnAD"
+        logoText="OnCut"
         color="info"
         logo={logo}
         open={mobileOpen}

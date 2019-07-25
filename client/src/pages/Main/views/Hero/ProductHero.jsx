@@ -90,10 +90,10 @@ function ProductHero(props) {
 
   // const [check] = React.useState(true);
 
-  const handleClick = useCallback(() => {
+  const handleClick = () => {
     // handle login Click
     history.push('/dashboard/main');
-  });
+  };
 
   return (
     <ProductHeroLayout
