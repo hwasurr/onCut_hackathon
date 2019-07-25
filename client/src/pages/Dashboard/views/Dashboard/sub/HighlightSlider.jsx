@@ -45,6 +45,19 @@ const sliderStyle = theme => ({
   },
 });
 
+const marks = [
+  { value: 0, label: '0' },
+  { value: 20, label: '2' },
+  { value: 37, label: '3' },
+  { value: 54, label: '4' },
+  { value: 56, label: '5' },
+  { value: 60, label: '6' },
+  { value: 64, label: '7' },
+  { value: 72, label: '8' },
+  { value: 74, label: '9' },
+  { value: 88, label: '10' },
+];
+
 function HighlightSlider(props) {
   const { ...rest } = props;
   const [value, setValue] = React.useState(1);
@@ -60,15 +73,14 @@ function HighlightSlider(props) {
   return (
     <Slider
       value={value}
-      min={1}
-      max={99}
-      marks
+      step={null}
+      marks={marks}
       onChange={handleChange}
       // marks
       valueLabelDisplay="on"
       aria-labelledby="range-slider"
       getAriaValueText={valuetext}
-      valueLabelFormat={x => `${x}구간`}
+      valueLabelFormat={x => `${x}%`}
       {...rest}
     />
   );

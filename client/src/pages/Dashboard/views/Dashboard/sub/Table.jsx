@@ -29,21 +29,21 @@ function usePageNationTable(data) {
 }
 
 export default function TableChartTab(props) {
-  const { tableData } = props;
+  const { data } = props;
   // for Table
   const {
     emptyRows, rowsPerPage, page,
     handleChangeTablePage, handleChangeTableRowsPerPage,
-  } = usePageNationTable(tableData);
+  } = usePageNationTable(data);
 
   return (
     <div>
-      {tableData.payload !== null
+      {data.payload !== null
         && (
           <Table
             tableHeaderColor="danger"
-            tableHead={tableData.payload.columns}
-            tableData={tableData.payload.data}
+            tableHead={data.tableData.columns}
+            tableData={data.tableData.data}
             pagination
             handleChangeTablePage={handleChangeTablePage}
             handleChangeTableRowsPerPage={handleChangeTableRowsPerPage}
@@ -58,5 +58,5 @@ export default function TableChartTab(props) {
 }
 
 TableChartTab.propTypes = {
-  tableData: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired,
 };

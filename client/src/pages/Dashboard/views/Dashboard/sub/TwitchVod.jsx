@@ -18,11 +18,15 @@ const useStyles = makeStyles(theme => ({
 // https://player.twitch.tv/?autoplay=false&t=00h00m07s&video=v455886675"
 
 export default function TwitchVod(props) {
-  const { creatorName, ...rest } = props;
+  const { creatorName, videoId, ...rest } = props;
+  const url = creatorName
+    ? `https://player.twitch.tv/?channel=${creatorName}`
+    : `https://player.twitch.tv/?video=${videoId}`;
   const classes = useStyles();
+
   return (
     <Iframe
-      url={`https://player.twitch.tv/?channel=${creatorName}`}
+      url={url}
       className={classes.iframe}
       {...rest}
     />

@@ -32,7 +32,7 @@ export default function PercentageSelect() {
   return (
     <form autoComplete="off">
       <FormControl className={classes.formControl}>
-        <InputLabel htmlFor="demo-controlled-open-select">역치 설정</InputLabel>
+        <InputLabel htmlFor="demo-controlled-open-select">포인트 개수 설정</InputLabel>
         <Select
           open={open}
           onClose={handleClose}

@@ -17,13 +17,9 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-export default function MaterialUIPickers() {
-  // The first commit of Material-UI
+export default function MaterialUIPickers(props) {
+  const { selectedDate, handleDateChange } = props;
   const classes = useStyles();
-  const [selectedDate, setSelectedDate] = React.useState(new Date('2019-07-25'));
-  function handleDateChange(date) {
-    setSelectedDate(date);
-  }
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils} locale={koLocale}>
