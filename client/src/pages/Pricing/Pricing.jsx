@@ -16,7 +16,7 @@ import withRoot from '../Main/withRoot';
 const useStyles = makeStyles(theme => ({
   '@global': {
     body: {
-      marginTop: theme.spacing(8),
+      marginTop: theme.spacing(10),
       backgroundColor: theme.palette.common.white,
     },
     ul: {
@@ -74,7 +74,7 @@ const tiers = [
   },
   {
     title: 'Pro',
-    subheader: 'Most popular',
+    subheader: '가장 인기있습니다',
     price: '10,000',
     description: [
       '하이라이트 구간 추출 월 30건',
@@ -132,7 +132,7 @@ export default withRoot((props) => {
       </Container>
       {/* End hero unit */}
       <Container maxWidth="ms" component="main">
-        <Grid container spacing={5} alignItems="flex-end">
+        <Grid container spacing={5} alignItems="flex-end" style={{ marginTop: 25 }}>
           {tiers.map(tier => (
             // Enterprise card is full width at sm breakpoint
             <Grid item key={tier.title} xs={12} sm={tier.title === 'Enterprise' ? 12 : 6} md={3}>
